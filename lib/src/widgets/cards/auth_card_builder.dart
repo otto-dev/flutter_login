@@ -463,14 +463,26 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
               alignment: Alignment.topCenter,
               child: Scrollbar(
                 child: SingleChildScrollView(
-                  child: _changeToCard(context, index),
+                  child: InkWell(
+                    onTap: () {},
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    splashFactory: NoSplash.splashFactory,
+                    child: _changeToCard(context, index),
+                  ),
                 ),
               ),
             );
           } else {
             return Align(
               alignment: Alignment.topCenter,
-              child: _changeToCard(context, index),
+              child: InkWell(
+                onTap: () {},
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                splashFactory: NoSplash.splashFactory,
+                child: _changeToCard(context, index),
+              ),
             );
           }
         },
