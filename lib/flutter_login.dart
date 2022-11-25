@@ -277,6 +277,7 @@ class FlutterLogin extends StatefulWidget {
     dynamic logo,
     this.messages,
     this.theme,
+    this.displayNameValidator,
     this.userValidator,
     this.passwordValidator,
     this.onSubmitAnimationCompleted,
@@ -341,6 +342,10 @@ class FlutterLogin extends StatefulWidget {
   /// shown in the demo gifs and use the colorsheme in the closest `Theme`
   /// widget
   final LoginTheme? theme;
+
+  /// Display name validating logic, Returns an error string to display if the input is
+  /// invalid, or null otherwise
+  final FormFieldValidator<String>? displayNameValidator;
 
   /// Email validating logic, Returns an error string to display if the input is
   /// invalid, or null otherwise
@@ -437,6 +442,13 @@ class FlutterLogin extends StatefulWidget {
 
   /// A widget that can be placed on top of the loginCard.
   final Widget? headerWidget;
+
+  static String? defaultDisplayNameValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'No display name provided!';
+    }
+    return null;
+  }
 
   static String? defaultEmailValidator(String? value) {
     if (value == null || value.isEmpty || !Regex.email.hasMatch(value)) {
@@ -742,6 +754,8 @@ class _FlutterLoginState extends State<FlutterLogin>
     final cardTopPosition = loginTheme.cardTopPosition ??
         max(deviceSize.height / 2 - cardInitialHeight / 2, 85);
     final headerHeight = cardTopPosition - headerMargin;
+    final displayNameValidator =
+        widget.displayNameValidator ?? FlutterLogin.defaultDisplayNameValidator;
     final userValidator =
         widget.userValidator ?? FlutterLogin.defaultEmailValidator;
     final passwordValidator =
@@ -807,6 +821,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                         userType: widget.userType,
                         padding: EdgeInsets.only(top: cardTopPosition),
                         loadingController: _loadingController,
+                        displayNameValidator: displayNameValidator,
                         userValidator: userValidator,
                         passwordValidator: passwordValidator,
                         onSubmit: _reverseHeaderAnimation,

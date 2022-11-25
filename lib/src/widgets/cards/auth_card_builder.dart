@@ -37,6 +37,7 @@ class AuthCard extends StatefulWidget {
     required this.loadingController,
     this.userValidator,
     this.passwordValidator,
+    this.displayNameValidator,
     this.onSubmit,
     this.onSubmitCompleted,
     this.hideForgotPasswordButton = false,
@@ -56,6 +57,7 @@ class AuthCard extends StatefulWidget {
   final AnimationController loadingController;
   final FormFieldValidator<String>? userValidator;
   final FormFieldValidator<String>? passwordValidator;
+  final FormFieldValidator<String>? displayNameValidator;
   final VoidCallback? onSubmit;
   final VoidCallback? onSubmitCompleted;
   final bool hideForgotPasswordButton;
@@ -339,6 +341,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             userType: widget.userType,
             loadingController: formController,
             userValidator: widget.userValidator,
+            displayNameValidator: widget.displayNameValidator,
             passwordValidator: widget.passwordValidator,
             requireAdditionalSignUpFields:
                 widget.additionalSignUpFields != null,
@@ -463,7 +466,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
               alignment: Alignment.topCenter,
               child: Scrollbar(
                 child: SingleChildScrollView(
-                  child: InkWell(
+                  child: InkWell( // stop tap propagation
                     onTap: () {},
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
@@ -476,7 +479,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
           } else {
             return Align(
               alignment: Alignment.topCenter,
-              child: InkWell(
+              child: InkWell( // stop tap propagation
                 onTap: () {},
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,

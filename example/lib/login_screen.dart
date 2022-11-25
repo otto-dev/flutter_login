@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:login_example/constants.dart';
 import 'package:login_example/custom_route.dart';
 import 'package:login_example/dashboard_screen.dart';
@@ -59,6 +58,7 @@ class LoginScreen extends StatelessWidget {
       onConfirmRecover: _signupConfirm,
       onConfirmSignup: _signupConfirm,
       loginAfterSignUp: false,
+      displayNameValidator: (s) => s == null || s.isEmpty ? "uh ohh...." : null,
       loginProviders: [
         LoginProvider(
           button: Buttons.linkedIn,

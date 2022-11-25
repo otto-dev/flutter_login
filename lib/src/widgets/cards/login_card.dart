@@ -6,6 +6,7 @@ class _LoginCard extends StatefulWidget {
     required this.loadingController,
     required this.userValidator,
     required this.passwordValidator,
+    required this.displayNameValidator,
     required this.onSwitchRecoveryPassword,
     required this.onSwitchSignUpAdditionalData,
     required this.userType,
@@ -21,6 +22,7 @@ class _LoginCard extends StatefulWidget {
   });
 
   final AnimationController loadingController;
+  final FormFieldValidator<String>? displayNameValidator;
   final FormFieldValidator<String>? userValidator;
   final FormFieldValidator<String>? passwordValidator;
   final VoidCallback onSwitchRecoveryPassword;
@@ -43,9 +45,11 @@ class _LoginCard extends StatefulWidget {
 class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+  final _nameFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
 
+  late TextEditingController _displayNameController;
   late TextEditingController _nameController;
   late TextEditingController _passController;
   late TextEditingController _confirmPassController;
@@ -74,6 +78,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     super.initState();
 
     final auth = Provider.of<Auth>(context, listen: false);
+    _displayNameController = TextEditingController(text: auth.displayName);
     _nameController = TextEditingController(text: auth.email);
     _passController = TextEditingController(text: auth.password);
     _confirmPassController = TextEditingController(text: auth.confirmPassword);
@@ -125,6 +130,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   @override
   void dispose() {
     widget.loadingController.removeStatusListener(handleLoadingAnimationStatus);
+    _nameFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
 
@@ -307,6 +313,30 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     return true;
   }
 
+  Widget _buildDisplayNameField(
+    double width,
+    LoginMessages messages,
+    Auth auth,
+  ) {
+    return AnimatedTextFormField(
+      controller: _displayNameController,
+      width: width,
+      loadingController: widget.loadingController,
+      interval: _nameTextFieldLoadingAnimationInterval,
+      labelText: messages.displayNameHint,
+      autofillHints: _isSubmitting ? null : [AutofillHints.name],
+      prefixIcon: Icon(FontAwesomeIcons.tag),
+      keyboardType: TextFieldUtils.getKeyboardType(LoginUserType.name),
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(_nameFocusNode);
+      },
+      validator: auth.isSignup ? widget.displayNameValidator : (value) => null,
+      onSaved: (value) => auth.displayName = value!,
+      enabled: !_isSubmitting,
+    );
+  }
+
   Widget _buildUserField(
     double width,
     LoginMessages messages,
@@ -325,6 +355,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       prefixIcon: TextFieldUtils.getPrefixIcon(widget.userType),
       keyboardType: TextFieldUtils.getKeyboardType(widget.userType),
       textInputAction: TextInputAction.next,
+      focusNode: _nameFocusNode,
       onFieldSubmitted: (value) {
         FocusScope.of(context).requestFocus(_passwordFocusNode);
       },
@@ -642,6 +673,22 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     final cardWidth = min(MediaQuery.of(context).size.width * 0.75, 360.0);
     const cardPadding = 16.0;
     final textFieldWidth = cardWidth - cardPadding * 2;
+    final expandableDisplayNameInput = ExpandableContainer(
+      controller: _switchAuthController,
+      initialState: isLogin
+          ? ExpandableContainerState.shrunk
+          : ExpandableContainerState.expanded,
+      alignment: Alignment.topLeft,
+      color: theme.cardTheme.color,
+      width: cardWidth,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      onExpandCompleted: () => _postSwitchAuthController.forward(),
+      child: _buildDisplayNameField(
+        textFieldWidth,
+        messages,
+        auth,
+      ),
+    );
     final authForm = Form(
       key: _formKey,
       child: Column(
@@ -650,13 +697,15 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             padding: const EdgeInsets.only(
               left: cardPadding,
               right: cardPadding,
-              top: cardPadding + 10,
+              top: cardPadding,
             ),
             width: cardWidth,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 if (widget.introWidget != null) widget.introWidget!,
+                expandableDisplayNameInput,
+                const SizedBox(height: 10),
                 _buildUserField(textFieldWidth, messages, auth),
                 const SizedBox(height: 20),
                 _buildPasswordField(textFieldWidth, messages, auth),
@@ -665,9 +714,6 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             ),
           ),
           ExpandableContainer(
-            backgroundColor: _switchAuthController.isCompleted
-                ? null
-                : theme.colorScheme.secondary,
             controller: _switchAuthController,
             initialState: isLogin
                 ? ExpandableContainerState.shrunk
@@ -676,7 +722,6 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             color: theme.cardTheme.color,
             width: cardWidth,
             padding: const EdgeInsets.symmetric(horizontal: cardPadding),
-            onExpandCompleted: () => _postSwitchAuthController.forward(),
             child: Column(
               children: [
                 Padding(

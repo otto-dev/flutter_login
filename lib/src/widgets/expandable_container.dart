@@ -12,7 +12,6 @@ class ExpandableContainer extends StatefulWidget {
     required this.controller,
     this.onExpandCompleted,
     this.alignment,
-    this.backgroundColor,
     this.color,
     this.width,
     this.height,
@@ -24,7 +23,6 @@ class ExpandableContainer extends StatefulWidget {
   final VoidCallback? onExpandCompleted;
   final Widget child;
   final Alignment? alignment;
-  final Color? backgroundColor;
   final Color? color;
   final double? width;
   final double? height;
@@ -69,7 +67,8 @@ class _ExpandableContainerState extends State<ExpandableContainer> {
         curve: const Interval(.6875, 1.0, curve: Curves.fastOutSlowIn),
       ),
     )..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
+        if (status == AnimationStatus.completed &&
+            widget.onExpandCompleted != null) {
           widget.onExpandCompleted!();
         }
       });
@@ -79,25 +78,16 @@ class _ExpandableContainerState extends State<ExpandableContainer> {
   Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor: _sizeAnimation,
-      child: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(color: widget.backgroundColor),
-            ),
-          ),
-          SlideTransition(
-            position: _slideAnimation,
-            child: Container(
-              alignment: widget.alignment,
-              color: widget.color,
-              width: widget.width,
-              height: widget.height,
-              padding: widget.padding,
-              child: widget.child,
-            ),
-          ),
-        ],
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: Container(
+          alignment: widget.alignment,
+          color: widget.color,
+          width: widget.width,
+          height: widget.height,
+          padding: widget.padding,
+          child: widget.child,
+        ),
       ),
     );
   }
