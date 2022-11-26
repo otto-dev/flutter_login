@@ -6,6 +6,7 @@ class _LoginCard extends StatefulWidget {
     required this.loadingController,
     required this.userValidator,
     required this.passwordValidator,
+    required this.loginPasswordValidator,
     required this.displayNameValidator,
     required this.onSwitchRecoveryPassword,
     required this.onSwitchSignUpAdditionalData,
@@ -25,6 +26,7 @@ class _LoginCard extends StatefulWidget {
   final FormFieldValidator<String>? displayNameValidator;
   final FormFieldValidator<String>? userValidator;
   final FormFieldValidator<String>? passwordValidator;
+  final FormFieldValidator<String>? loginPasswordValidator;
   final VoidCallback onSwitchRecoveryPassword;
   final VoidCallback onSwitchSignUpAdditionalData;
   final VoidCallback onSwitchConfirmSignup;
@@ -388,7 +390,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
           FocusScope.of(context).requestFocus(_confirmPasswordFocusNode);
         }
       },
-      validator: widget.passwordValidator,
+      validator: auth.isLogin
+          ? widget.loginPasswordValidator
+          : widget.passwordValidator,
       onSaved: (value) => auth.password = value!,
       enabled: !_isSubmitting,
     );

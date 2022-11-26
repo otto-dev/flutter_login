@@ -280,6 +280,7 @@ class FlutterLogin extends StatefulWidget {
     this.displayNameValidator,
     this.userValidator,
     this.passwordValidator,
+    this.loginPasswordValidator,
     this.onSubmitAnimationCompleted,
     this.logoTag,
     this.userType = LoginUserType.email,
@@ -351,8 +352,11 @@ class FlutterLogin extends StatefulWidget {
   /// invalid, or null otherwise
   final FormFieldValidator<String>? userValidator;
 
-  /// Same as [userValidator] but for password
+  /// Same as [userValidator] but for password during registration
   final FormFieldValidator<String>? passwordValidator;
+
+  /// Same as [userValidator] but for password during login
+  final FormFieldValidator<String>? loginPasswordValidator;
 
   /// Called after the submit animation's completed. Put your route transition
   /// logic here. Recommend to use with [logoTag] and [titleTag]
@@ -760,6 +764,8 @@ class _FlutterLoginState extends State<FlutterLogin>
         widget.userValidator ?? FlutterLogin.defaultEmailValidator;
     final passwordValidator =
         widget.passwordValidator ?? FlutterLogin.defaultPasswordValidator;
+    final loginPasswordValidator =
+        widget.loginPasswordValidator ?? passwordValidator;
 
     Widget footerWidget = const SizedBox();
     if (widget.footer != null) {
@@ -824,6 +830,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                         displayNameValidator: displayNameValidator,
                         userValidator: userValidator,
                         passwordValidator: passwordValidator,
+                        loginPasswordValidator: loginPasswordValidator,
                         onSubmit: _reverseHeaderAnimation,
                         onSubmitCompleted: widget.onSubmitAnimationCompleted,
                         hideSignUpButton: widget.onSignup == null,

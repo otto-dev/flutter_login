@@ -232,6 +232,12 @@ class LoginScreen extends StatelessWidget {
         return null;
       },
       passwordValidator: (value) {
+        if (value!.length < 5) {
+          return 'Password too short';
+        }
+        return null;
+      },
+      loginPasswordValidator: (value) {
         if (value!.isEmpty) {
           return 'Password is empty';
         }
