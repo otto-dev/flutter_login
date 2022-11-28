@@ -1,4 +1,3 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 Size? getWidgetSize(GlobalKey key) {
@@ -6,43 +5,28 @@ Size? getWidgetSize(GlobalKey key) {
   return renderBox?.size;
 }
 
-Flushbar showSuccessToast(
+showSuccessToast(
   BuildContext context,
   String title,
   String message, [
   Duration? duration,
 ]) {
-  return Flushbar(
-    title: title,
-    message: message,
-    icon: const Icon(
-      Icons.check,
-      size: 28.0,
-      color: Colors.white,
-    ),
+  final snackBar = SnackBar(
+    content: Text("$title: $message"),
+    backgroundColor: Colors.green[400],
     duration: duration ?? const Duration(seconds: 4),
-    isDismissible: false,
-    backgroundGradient: LinearGradient(
-      colors: [Colors.green[600]!, Colors.green[400]!],
-    ),
-    onTap: (flushbar) => flushbar.dismiss(),
-  )..show(context);
+  );
+  ScaffoldMessenger.of(context).clearSnackBars();
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-Flushbar showErrorToast(BuildContext context, String title, String message) {
-  return Flushbar(
-    title: title,
-    message: message,
-    isDismissible: false,
-    icon: const Icon(
-      Icons.error,
-      size: 28.0,
-      color: Colors.white,
-    ),
+showErrorToast(BuildContext context, String title, String message) {
+  final snackBar = SnackBar(
+    content: Text("$title: $message"),
+    backgroundColor: Colors.red[400],
     duration: const Duration(seconds: 4),
-    backgroundGradient: LinearGradient(
-      colors: [Colors.red[600]!, Colors.red[400]!],
-    ),
-    onTap: (flushbar) => flushbar.dismiss(),
-  )..show(context);
+  );
+  ScaffoldMessenger.of(context).clearSnackBars();
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
 }
