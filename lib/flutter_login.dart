@@ -306,6 +306,7 @@ class FlutterLogin extends StatefulWidget {
     this.confirmSignupKeyboardType,
     this.headerWidget,
     this.onSwitchToAdditionalFields,
+    this.initialPageIndex = 0,
   })  : assert((logo is String?) || (logo is ImageProvider?)),
         logo = logo is String ? AssetImage(logo) : logo as ImageProvider?;
 
@@ -446,6 +447,10 @@ class FlutterLogin extends StatefulWidget {
 
   /// A widget that can be placed on top of the loginCard.
   final Widget? headerWidget;
+
+
+  /// Which page to show first
+  final int initialPageIndex;
 
   static String? defaultDisplayNameValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -848,6 +853,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                         confirmSignupKeyboardType:
                             widget.confirmSignupKeyboardType,
                         introWidget: widget.headerWidget,
+                        initialPageIndex: widget.initialPageIndex,
                       ),
                     ),
                     Positioned(

@@ -24,9 +24,13 @@ import 'package:provider/provider.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 part 'additional_signup_card.dart';
+
 part 'login_card.dart';
+
 part 'recover_card.dart';
+
 part 'recover_confirm_card.dart';
+
 part 'signup_confirm_card.dart';
 
 class AuthCard extends StatefulWidget {
@@ -49,6 +53,7 @@ class AuthCard extends StatefulWidget {
     this.disableCustomPageTransformer = false,
     this.loginTheme,
     this.navigateBackAfterRecovery = false,
+    this.initialPageIndex = 0,
     required this.scrollable,
     required this.confirmSignupKeyboardType,
     this.introWidget,
@@ -67,6 +72,7 @@ class AuthCard extends StatefulWidget {
   final bool loginAfterSignUp;
   final LoginUserType userType;
   final bool hideProvidersTitle;
+  final int initialPageIndex;
 
   final List<UserFormField>? additionalSignUpFields;
 
@@ -99,7 +105,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
   var _isLoadingFirstTime = true;
   static const cardSizeScaleEnd = .2;
 
-  final TransformerPageController _pageController = TransformerPageController();
+  late TransformerPageController _pageController;
   late AnimationController _formLoadingController;
   late AnimationController _routeTransitionController;
 
@@ -115,6 +121,10 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _pageController = TransformerPageController(
+      initialPage: widget.initialPageIndex,
+    );
+    _pageIndex = widget.initialPageIndex;
 
     widget.loadingController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -469,7 +479,8 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
               alignment: Alignment.topCenter,
               child: Scrollbar(
                 child: SingleChildScrollView(
-                  child: InkWell( // stop tap propagation
+                  child: InkWell(
+                    // stop tap propagation
                     onTap: () {},
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
@@ -482,7 +493,8 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
           } else {
             return Align(
               alignment: Alignment.topCenter,
-              child: InkWell( // stop tap propagation
+              child: InkWell(
+                // stop tap propagation
                 onTap: () {},
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,

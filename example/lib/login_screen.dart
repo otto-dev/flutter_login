@@ -58,6 +58,7 @@ class LoginScreen extends StatelessWidget {
       onConfirmRecover: _signupConfirm,
       onConfirmSignup: _signupConfirm,
       loginAfterSignUp: false,
+      initialPageIndex: 3,
       displayNameValidator: (s) => s == null || s.isEmpty ? "uh ohh...." : null,
       loginProviders: [
         LoginProvider(
