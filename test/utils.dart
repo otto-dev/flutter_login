@@ -11,10 +11,15 @@ const loadingAnimationDuration = Duration(seconds: 1);
 
 class LoginCallback {
   Future<String>? onLogin(LoginData? data) => null;
+
   Future<String>? onSignup(SignupData? data) => null;
+
   Future<String>? onRecoverPassword(String? data) => null;
+
   String? userValidator(String? value) => null;
+
   String? passwordValidator(String? value) => null;
+
   void onSubmitAnimationCompleted() {}
 }
 
@@ -44,10 +49,16 @@ List<LoginData> loginStubCallback(MockCallback mockCallback) {
 List<SignupData> signupStubCallback(MockCallback mockCallback) {
   reset(mockCallback);
 
-  final user =
-      SignupData.fromSignupForm(name: 'near@gmail.com', password: '12345');
-  final invalidUser =
-      SignupData.fromSignupForm(name: 'not.exists@gmail.com', password: '');
+  final user = SignupData.fromSignupForm(
+    name: 'near@gmail.com',
+    password: '12345',
+    displayName: 'name',
+  );
+  final invalidUser = SignupData.fromSignupForm(
+    name: 'not.exists@gmail.com',
+    password: '',
+    displayName: 'name',
+  );
 
   when(mockCallback.userValidator(user.name)).thenReturn(null);
   when(mockCallback.userValidator('invalid-name')).thenReturn('Invalid!');
@@ -178,9 +189,13 @@ Text recoverDescriptionTextWidget() {
 // tester.tap() not working for some reasons. Workaround:
 // https://github.com/flutter/flutter/issues/31066#issuecomment-530507319
 void clickSubmitButton() => submitButtonWidget().onPressed!();
+
 void clickForgotPasswordButton() => forgotPasswordButtonWidget().onPressed!();
+
 void clickGoBackButton() => goBackButtonWidget().onPressed!();
+
 void clickSwitchAuthButton() => switchAuthButtonWidget().onPressed!();
+
 void clickFirstProvider() => firstProviderButton().onPressed();
 
 /// this prevents this error:

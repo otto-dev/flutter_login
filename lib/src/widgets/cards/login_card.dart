@@ -187,6 +187,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
           SignupData.fromSignupForm(
             name: auth.email,
             password: auth.password,
+            displayName: auth.displayName,
             termsOfService: auth.getTermsOfServiceResults(),
           ),
         );
@@ -196,6 +197,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             SignupData.fromSignupForm(
               name: auth.email,
               password: auth.password,
+              displayName: auth.displayName,
               termsOfService: auth.getTermsOfServiceResults(),
             ),
           );

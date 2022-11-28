@@ -139,6 +139,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
           SignupData.fromSignupForm(
             name: auth.email,
             password: auth.password,
+            displayName: auth.displayName,
             additionalSignupData: auth.additionalSignupData,
             termsOfService: auth.getTermsOfServiceResults(),
           ),
