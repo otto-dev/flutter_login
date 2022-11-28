@@ -21,6 +21,7 @@ Flushbar showSuccessToast(
       color: Colors.white,
     ),
     duration: duration ?? const Duration(seconds: 4),
+    isDismissible: false,
     backgroundGradient: LinearGradient(
       colors: [Colors.green[600]!, Colors.green[400]!],
     ),
@@ -32,6 +33,7 @@ Flushbar showErrorToast(BuildContext context, String title, String message) {
   return Flushbar(
     title: title,
     message: message,
+    isDismissible: false,
     icon: const Icon(
       Icons.error,
       size: 28.0,
