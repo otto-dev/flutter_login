@@ -75,11 +75,6 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
       return false;
     }
 
-    showSuccessToast(
-      context,
-      messages.flushbarTitleSuccess,
-      messages.confirmSignupSuccess,
-    );
     setState(() => _isSubmitting = false);
     await _fieldSubmitController.reverse();
 
