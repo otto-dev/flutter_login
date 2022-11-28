@@ -328,6 +328,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       autofillHints: _isSubmitting ? null : [AutofillHints.name],
       prefixIcon: Icon(FontAwesomeIcons.tag),
       keyboardType: TextFieldUtils.getKeyboardType(LoginUserType.name),
+      textCapitalization: TextCapitalization.words,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (value) {
         FocusScope.of(context).requestFocus(_nameFocusNode);

@@ -45,6 +45,7 @@ class AnimatedTextFormField extends StatefulWidget {
     this.onSaved,
     this.autocorrect = false,
     this.autofillHints,
+    this.textCapitalization,
   }) : assert(
           (inertiaController == null && inertiaDirection == null) ||
               (inertiaController != null && inertiaDirection != null),
@@ -61,6 +62,7 @@ class AnimatedTextFormField extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final TextInputType? keyboardType;
+  final TextCapitalization? textCapitalization;
   final TextInputAction? textInputAction;
   final bool obscureText;
   final TextEditingController? controller;
@@ -235,6 +237,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
       focusNode: widget.focusNode,
       decoration: _getInputDecoration(theme),
       keyboardType: widget.keyboardType,
+      textCapitalization: widget.textCapitalization ?? TextCapitalization.none,
       textInputAction: widget.textInputAction,
       obscureText: widget.obscureText,
       onFieldSubmitted: widget.onFieldSubmitted,
