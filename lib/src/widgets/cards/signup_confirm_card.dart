@@ -8,12 +8,14 @@ class _ConfirmSignupCard extends StatefulWidget {
     this.loginAfterSignUp = true,
     required this.loadingController,
     required this.keyboardType,
+    this.loginTheme,
   });
 
   final bool loginAfterSignUp;
   final VoidCallback onBack;
   final VoidCallback onSubmitCompleted;
   final AnimationController loadingController;
+  final LoginTheme? loginTheme;
   final TextInputType? keyboardType;
 
   @override
@@ -169,14 +171,19 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     );
   }
 
-  Widget _buildBackButton(ThemeData theme, LoginMessages messages) {
+  Widget _buildBackButton(
+    ThemeData theme,
+    LoginMessages messages,
+    LoginTheme? loginTheme,
+  ) {
+    final theme = Theme.of(context);
     return ScaleTransition(
       scale: widget.loadingController,
       child: MaterialButton(
         onPressed: !_isSubmitting ? widget.onBack : null,
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        textColor: theme.primaryColor,
+        textColor: loginTheme?.switchAuthTextColor ?? theme.primaryColor,
         child: Text(messages.goBackButton),
       ),
     );
@@ -219,7 +226,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
                 const SizedBox(height: 10),
                 _buildResendCode(theme, messages),
                 _buildConfirmButton(theme, messages),
-                _buildBackButton(theme, messages),
+                _buildBackButton(theme, messages, widget.loginTheme),
               ],
             ),
           ),

@@ -448,6 +448,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             },
             loginAfterSignUp: widget.loginAfterSignUp,
             keyboardType: widget.confirmSignupKeyboardType,
+            loginTheme: widget.loginTheme,
           ),
         );
     }
